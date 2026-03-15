@@ -2,7 +2,27 @@
   "permissions": {
     "allow": [
       "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\")",
-      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --yes)"
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --yes)",
+      "Bash(ls c:/code/Division2BuildManager/node_modules/.bin/tsc*)",
+      "Bash(npm install:*)",
+      "Bash(/c/code/Division2BuildManager/node_modules/.bin/tsc --noEmit)",
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "WebFetch(domain:division2.tracker.gg)",
+      "WebFetch(domain:d2gunner.com)",
+      "WebFetch(domain:www.ign.com)",
+      "WebFetch(domain:division2builds.gg)",
+      "WebFetch(domain:www.thegamer.com)",
+      "WebFetch(domain:gamerant.com)",
+      "WebFetch(domain:www.ubisoft.com)",
+      "WebFetch(domain:guides.gamepressure.com)",
+      "WebFetch(domain:www.polygon.com)",
+      "WebFetch(domain:www.shacknews.com)",
+      "WebFetch(domain:wiki.guildwars2.com)",
+      "WebSearch",
+      "WebFetch(domain:steamcommunity.com)",
+      "WebFetch(domain:kboosting.com)",
+      "WebFetch(domain:thedivision.fandom.com)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

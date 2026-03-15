@@ -37,3 +37,9 @@
 ## User Preferences
 - Prefers concise communication, no emojis unless asked
 - Wants Vercel deployment (confirmed intent, not yet set up)
+- Works across multiple devices — keep memory up to date after each session
+
+## Data Status (as of 2026-03-15)
+See [project_data_status.md](project_data_status.md) — all major data files complete.
+See [project_outstanding_stubs.md](project_outstanding_stubs.md) — specific missing fields (5 new-release weapon stubs, skill gaps, 29 named gear brand blanks).
+See [feedback_data_entry.md](feedback_data_entry.md) — data entry conventions (stat storage, modSlots encoding, null rules).

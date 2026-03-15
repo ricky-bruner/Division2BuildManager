@@ -1,80 +1,13 @@
-import type { GearItem, WeaponItem, SkillSlot, Build, BrandDef, GearSetDef } from "./types";
+import type { GearItem, WeaponItem, SkillSlot, Build } from "./types";
+export { GEAR_SETS, GEAR_SET_MAP, GEAR_SET_NAMES } from "./gearSetData";
+export { BRANDS, BRAND_MAP, BRAND_NAMES } from "./brandSetData";
 
-const TBD = "TBD";
+// Derived helpers
+import { GEAR_SETS as _GS } from "./gearSetData";
+import { BRANDS as _B }     from "./brandSetData";
+export const GEAR_SET_BRANDS = new Set(_GS.map(g => g.name));
+export const BRAND_SETS      = _B.map(b => b.name);
 
-// ── Brand Sets (34) ─────────────────────────────────────────
-export const BRANDS: BrandDef[] = [
-  { id: "511-tactical",        name: "5.11 Tactical",               icon: "/brandsets/511.png",                   bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "airaldi-holdings",    name: "Airaldi Holdings",            icon: "/brandsets/airaldi.png",               bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "alps-summit",         name: "Alps Summit Armament",        icon: "/brandsets/alps.png",                  bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "badger-tuff",         name: "Badger Tuff",                 icon: "/brandsets/badger.png",                bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "belstone-armory",     name: "Belstone Armory",             icon: "/brandsets/belstone.png",              bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "brazos-de-arcabuz",   name: "Brazos de Arcabuz",           icon: "/brandsets/brazos.png",                bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "ceska-vyroba",        name: "Česká Výroba s.r.o.",         icon: "/brandsets/ceska.png",                 bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "china-light",         name: "China Light Industries Corp.",icon: "/brandsets/china.png",                 bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "douglas-harding",     name: "Douglas & Harding",           icon: "/brandsets/douglas.png",               bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "electrique",          name: "Electrique",                  icon: "/brandsets/electrique.png",            bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "empress-intl",        name: "Empress International",       icon: "/brandsets/empress.png",               bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "fenris-group",        name: "Fenris Group AB",             icon: "/brandsets/fenris.png",                bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "gila-guard",          name: "Gila Guard",                  icon: "/brandsets/gila.png",                  bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "golan-gear",          name: "Golan Gear Ltd",              icon: "/brandsets/golan.png",                 bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "grupo-sombra",        name: "Grupo Sombra S.A.",           icon: "/brandsets/grupo.png",                 bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "habsburg-guard",      name: "Habsburg Guard",              icon: "/brandsets/habsburg.png",              bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "hana-u",              name: "Hana-U Corporation",          icon: "/brandsets/hanau.png",                 bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "imminence-armaments", name: "Imminence Armaments",         icon: "/brandsets/imminence_armaments.png",   bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "legatus",             name: "Legatus S.p.A.",              icon: "/brandsets/legatus.png",               bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "lengmo",              name: "Lengmo",                      icon: "/brandsets/lengmo.png",                bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "murakami",            name: "Murakami Industries",         icon: "/brandsets/murakami.png",              bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "overlord-armaments",  name: "Overlord Armaments",          icon: "/brandsets/overlord.png",              bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "palisade-steelworks", name: "Palisade Steelworks",         icon: "/brandsets/palisade_steelworks.png",   bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "petrov-defense",      name: "Petrov Defense Group",        icon: "/brandsets/petrov.png",                bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "providence-defense",  name: "Providence Defense",          icon: "/brandsets/providence.png",            bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "richter-kaiser",      name: "Richter & Kaiser GmbH",       icon: "/brandsets/richter.png",               bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "shiny-monkey-gear",   name: "Shiny Monkey Gear",           icon: "/brandsets/shiny_monkey_gear.png",     bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "sokolov-concern",     name: "Sokolov Concern",             icon: "/brandsets/sokolov.png",               bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "unit-alloys",         name: "Unit Alloys",                 icon: "/brandsets/unit_alloys.png",           bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "urban-lookout",       name: "Urban Lookout",               icon: "/brandsets/urban_lookout.png",         bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "uzina-getica",        name: "Uzina Getica",                icon: "/brandsets/uzina.png",                 bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "walker-harris",       name: "Walker, Harris & Co.",        icon: "/brandsets/walker.png",                bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "wyvern-wear",         name: "Wyvern Wear",                 icon: "/brandsets/wyvern.png",                bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "yaahl-gear",          name: "Yaahl Gear",                  icon: "/brandsets/yaahl.png",                 bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-  { id: "zwiadowka",           name: "Zwiadowka Sp. z o.o.",        icon: "/brandsets/zwiadowka.png",             bonuses: [{ pieces: 1, bonus: TBD }, { pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }] },
-];
-
-// ── Gear Sets (25) ──────────────────────────────────────────
-export const GEAR_SETS: GearSetDef[] = [
-  { id: "aces-eights",          name: "Aces & Eights",        icon: "/gearsets/aces.png",                bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "aegis",                name: "Aegis",                icon: "/gearsets/aegis.png",               bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "breaking-point",       name: "Breaking Point",       icon: "/gearsets/breaking_point.png",      bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "cavalier",             name: "Cavalier",             icon: "/gearsets/cavalier.png",            bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "concentrated-company", name: "Concentrated Company", icon: "/gearsets/concentrated_company.png",bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "eclipse-protocol",     name: "Eclipse Protocol",     icon: "/gearsets/eclipse.png",             bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "foundry-bulwark",      name: "Foundry Bulwark",      icon: "/gearsets/foundry.png",             bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "future-initiative",    name: "Future Initiative",    icon: "/gearsets/future.png",              bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "hard-wired",           name: "Hard Wired",           icon: "/gearsets/hard.png",                bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "heartbreaker",         name: "Heartbreaker",         icon: "/gearsets/heartbreaker.png",        bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "hotshot",              name: "Hotshot",              icon: "/gearsets/hotshot.png",             bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "hunters-fury",         name: "Hunter's Fury",        icon: "/gearsets/hunters.png",             bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "measured-assembly",    name: "Measured Assembly",    icon: "/gearsets/measured_assembly.png",   bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "negotiators-dilemma",  name: "Negotiator's Dilemma", icon: "/gearsets/negotiators.png",         bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "ongoing-directive",    name: "Ongoing Directive",    icon: "/gearsets/ongoing.png",             bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "ortiz-exuro",          name: "Ortiz: Exuro",         icon: "/gearsets/ortiz_exuro.png",         bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "refactor",             name: "Refactor",             icon: "/gearsets/refactor.png",            bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "rigger",               name: "Rigger",               icon: "/gearsets/rigger.png",              bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "strikers-battlegear",  name: "Striker's Battlegear", icon: "/gearsets/strikers.png",            bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "system-corruption",    name: "System Corruption",    icon: "/gearsets/system.png",              bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "tip-of-the-spear",     name: "Tip of the Spear",     icon: "/gearsets/tip.png",                 bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "tipping-scales",       name: "Tipping Scales",       icon: "/gearsets/tipping_scales.png",      bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "true-patriot",         name: "True Patriot",         icon: "/gearsets/true.png",                bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "umbra-initiative",     name: "Umbra Initiative",     icon: "/gearsets/umbra.png",               bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-  { id: "virtuoso",             name: "Virtuoso",             icon: "/gearsets/virtuoso.png",            bonuses: [{ pieces: 2, bonus: TBD }, { pieces: 3, bonus: TBD }, { pieces: 4, bonus: TBD }, { pieces: 6, bonus: TBD }] },
-];
-
-// Derived helpers — keep brand name lists for dropdowns / checks
-export const GEAR_SET_BRANDS = new Set(GEAR_SETS.map(g => g.name));
-
-// Legacy flat list for any remaining plain-select usage
-export const BRAND_SETS = BRANDS.map(b => b.name);
 
 export const GEAR_CORE_ATTRS = [
   "Weapon Damage", "Headshot Damage", "Armor", "Health",

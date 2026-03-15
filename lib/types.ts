@@ -1,22 +1,38 @@
 export type Rarity = "High-End" | "Named" | "Exotic" | "Gear Set";
 
+export type GearSlot = "mask" | "backpack" | "chest" | "gloves" | "holster" | "kneepads";
+
 export interface BrandBonus {
   pieces: number;
   bonus: string;
 }
 
 export interface BrandDef {
-  id: string;       // kebab-case, matches filename e.g. "alps-summit"
+  id:       string;
+  name:     string;
+  icon:     string;
+  coreAttr: string;    // default drop core — modifiable via tinkering
+  bonuses:  BrandBonus[];  // 1pc, 2pc, 3pc
+}
+
+export interface GearSetPerk {
   name: string;
-  icon: string;     // e.g. "/brands/alps-summit.png"
-  bonuses: BrandBonus[];
+  desc: string;
 }
 
 export interface GearSetDef {
-  id: string;
-  name: string;
-  icon: string;     // e.g. "/gearsets/strikers-battlegear.png"
-  bonuses: BrandBonus[];
+  id:              string;
+  name:            string;
+  icon:            string;
+  dlc:             boolean;
+  coreAttrs:       string[];
+  bonus2pc:        string[];
+  bonus3pc:        string[];
+  talent4pc?:      GearSetPerk;
+  chestTalent?:    GearSetPerk;
+  backpackTalent?: GearSetPerk;
+  dropLocation:    string;
+  talentCategory?: string;
 }
 
 export interface GearItem {

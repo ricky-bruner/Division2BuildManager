@@ -306,6 +306,13 @@ export const EXOTIC_WEAPONS: ExoticWeapon[] = [
     flavorText: "\"You will suffer as we suffered\" - Formerly Quarantined Outcast",
   },
 
+  {
+    weaponId: "big-alejandro", weaponName: "Big Alejandro", baseModel: "Ameli", type: "Light Machine Gun",
+    talentId: "",
+    fixedMods: {},
+    dropLocation: "",
+  },
+
   // ── SUBMACHINE GUNS ─────────────────────────────────────────────────────────
   {
     weaponId: "backfire", weaponName: "Backfire", baseModel: "MPX", type: "Submachine Gun",
