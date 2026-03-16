@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import type { Build } from "@/lib/types";
+import type { Build, GearSlot } from "@/lib/types";
 import { defaultBuild, GEAR_SLOTS, WEAPON_SLOTS } from "@/lib/gameData";
 import GearCard           from "./GearCard";
+import GearPickerModal    from "./GearPickerModal";
 import WeaponCard         from "./WeaponCard";
 import SkillCard          from "./SkillCard";
 import SpecializationCard from "./SpecializationCard";
@@ -24,6 +25,7 @@ export default function BuildPlanner() {
   const [builds, setBuilds]         = useState<Build[]>([defaultBuild()]);
   const [activeId, setActiveId]     = useState<number>(builds[0].id);
   const [editingName, setEditingName] = useState(false);
+  const [pickerSlot, setPickerSlot] = useState<GearSlot | null>(null);
   const importRef = useRef<HTMLInputElement>(null);
 
   const activeBuild = builds.find(b => b.id === activeId) ?? builds[0];
@@ -240,7 +242,7 @@ export default function BuildPlanner() {
                   slotId={slot.id}
                   slotLabel={slot.label}
                   item={activeBuild.gear[slot.id]}
-                  onChange={item => updateBuild(b => ({ ...b, gear: { ...b.gear, [slot.id]: item } }))}
+                  onOpenPicker={() => setPickerSlot(slot.id)}
                 />
               </div>
             ))}
@@ -289,6 +291,15 @@ export default function BuildPlanner() {
             />
             <div style={{ background: "#080d12", border: "1px solid #1a2530" }} />
           </div>
+
+          {pickerSlot && (
+            <GearPickerModal
+              slot={pickerSlot}
+              current={activeBuild.gear[pickerSlot]}
+              onConfirm={updated => { updateBuild(b => ({ ...b, gear: { ...b.gear, [pickerSlot]: updated } })); setPickerSlot(null); }}
+              onClose={() => setPickerSlot(null)}
+            />
+          )}
 
           {/* ── NOTES ── */}
           <SectionLabel>Notes</SectionLabel>

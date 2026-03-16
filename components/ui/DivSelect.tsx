@@ -1,9 +1,11 @@
 "use client";
 
+type SelectOption = string | { value: string; label: string };
+
 interface Props {
   value: string;
   onChange: (v: string) => void;
-  options: readonly string[];
+  options: readonly SelectOption[];
   label?: string;
   colorFn?: (v: string) => string;
 }
@@ -24,9 +26,11 @@ export default function DivSelect({ value, onChange, options, label, colorFn }: 
                    cursor-pointer outline-none w-full rounded-sm appearance-none
                    focus:border-[#2a4a6a] transition-colors"
       >
-        {options.map((o) => (
-          <option key={o} value={o}>{o}</option>
-        ))}
+        {options.map((o) => {
+          const val = typeof o === "string" ? o : o.value;
+          const lbl = typeof o === "string" ? o : o.label;
+          return <option key={val} value={val}>{lbl}</option>;
+        })}
       </select>
     </div>
   );

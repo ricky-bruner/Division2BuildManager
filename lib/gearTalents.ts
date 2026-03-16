@@ -404,6 +404,13 @@ export const GEAR_TALENT_LIST: Talent[] = [
     talentDesc: "Slots in with any equipped Gear Set and/or Brand Set item to fulfill a requirement towards unlocking a Gear and/or Brand Sets bonus. Can unlock bonuses from multiple sets simultaneously.",
     talentType: "exoticGear",
   },
+  {
+    talentId:   "rebalance",
+    talentName: "Rebalance",
+    talentIcon: "",
+    talentDesc: "Getting kills and hitting enemies 3 times builds Red stacks. Each stack provides 0.5% Weapon Damage. Getting hit 3 times builds Blue stacks. Each stack provides 0.5% Damage Resistance. Upon reaching 80 stacks in total, lose all stacks and receive a separate bonus of 0.5% Damage Resistance per Red stack and 0.5% Weapon Damage per Blue stack until the next time the stack cap is reached.",
+    talentType: "exoticGear",
+  },
 
   // ── Exotic Glove Talents ───────────────────────────────────────────────────
 

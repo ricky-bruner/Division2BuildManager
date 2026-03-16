@@ -1,4 +1,5 @@
-import type { GearItem, WeaponItem, SkillSlot, Build } from "./types";
+import type { WeaponItem, SkillSlot, Build } from "./types";
+import { defaultGearBuildSlot } from "./buildUtils";
 export { GEAR_SETS, GEAR_SET_MAP, GEAR_SET_NAMES } from "./gearSetData";
 export { BRANDS, BRAND_MAP, BRAND_NAMES } from "./brandSetData";
 
@@ -153,16 +154,6 @@ export const WEAPON_SLOTS = [
   { id: "sidearm"   as const, label: "Sidearm"   },
 ];
 
-export function defaultGearItem(): GearItem {
-  return {
-    name: "", brand: "", rarity: "High-End",
-    coreAttr: GEAR_CORE_ATTRS[0], coreValue: "",
-    minor1: MINOR_ATTRS[0], minor1Val: "",
-    minor2: MINOR_ATTRS[1], minor2Val: "",
-    talent: GEAR_TALENTS[0],
-    mod1: GEAR_MODS[0], mod2: GEAR_MODS[0],
-  };
-}
 
 export function defaultWeaponItem(): WeaponItem {
   return {
@@ -186,12 +177,12 @@ export function defaultBuild(): Build {
     name: "New Build",
     specialization: "",
     gear: {
-      mask:      defaultGearItem(),
-      backpack:  defaultGearItem(),
-      chest:     defaultGearItem(),
-      gloves:    defaultGearItem(),
-      holster:   defaultGearItem(),
-      kneepads:  defaultGearItem(),
+      mask:      defaultGearBuildSlot(),
+      backpack:  defaultGearBuildSlot(),
+      chest:     defaultGearBuildSlot(),
+      gloves:    defaultGearBuildSlot(),
+      holster:   defaultGearBuildSlot(),
+      kneepads:  defaultGearBuildSlot(),
     },
     weapons: {
       primary:   defaultWeaponItem(),

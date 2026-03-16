@@ -11,8 +11,8 @@ export interface BrandDef {
   id:       string;
   name:     string;
   icon:     string;
-  coreAttr: string;    // default drop core — modifiable via tinkering
-  bonuses:  BrandBonus[];  // 1pc, 2pc, 3pc
+  coreAttr: string;
+  bonuses:  BrandBonus[];
 }
 
 export interface GearSetPerk {
@@ -35,19 +35,20 @@ export interface GearSetDef {
   talentCategory?: string;
 }
 
-export interface GearItem {
-  name: string;
-  brand: string;
-  rarity: Rarity;
-  coreAttr: string;
-  coreValue: string;
-  minor1: string;
-  minor1Val: string;
-  minor2: string;
-  minor2Val: string;
-  talent: string;
-  mod1: string;
-  mod2: string;
+export type TinkeredSlot = "core" | "minor0" | "minor1" | "talent";
+
+export interface GearMinorValue {
+  attr:  string;
+  value: string;
+}
+
+export interface GearBuildSlot {
+  gearId:        string;           // "" = empty slot
+  coreAttr:      string;           // "" for all-cores exotics or unset
+  minors:        GearMinorValue[];
+  talent:        string;           // talentId / "{setId}-{slot}" / ""
+  modAttrs:      GearMinorValue[];
+  tinkeredSlot?: TinkeredSlot;
 }
 
 export interface WeaponItem {
@@ -77,17 +78,17 @@ export interface Build {
   name: string;
   specialization: string;
   gear: {
-    mask: GearItem;
-    backpack: GearItem;
-    chest: GearItem;
-    gloves: GearItem;
-    holster: GearItem;
-    kneepads: GearItem;
+    mask:      GearBuildSlot;
+    backpack:  GearBuildSlot;
+    chest:     GearBuildSlot;
+    gloves:    GearBuildSlot;
+    holster:   GearBuildSlot;
+    kneepads:  GearBuildSlot;
   };
   weapons: {
-    primary: WeaponItem;
+    primary:   WeaponItem;
     secondary: WeaponItem;
-    sidearm: WeaponItem;
+    sidearm:   WeaponItem;
   };
   skill1: SkillSlot;
   skill2: SkillSlot;
