@@ -54,12 +54,11 @@ export interface GearBuildSlot {
 export interface WeaponItem {
   name: string;
   rarity: Rarity;
+  weaponType: string;
   coreAttr: string;
   coreValue: string;
   minor1: string;
   minor1Val: string;
-  minor2: string;
-  minor2Val: string;
   talent1: string;
   talent2: string;
   scope: string;

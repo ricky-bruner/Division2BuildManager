@@ -355,8 +355,8 @@ export const GEAR_SETS: GearSetDef[] = [
 
   {
     id:            "system-corruption",
-    name:          "System Corruption (Dark Zone Exclusive)",
-    icon:          "/gearsets/system.png",
+    name:          "System Corruption",
+    icon:          "/gearsets/system_corruption.png",
     dlc:           false,
     coreAttrs:     ["Weapon Damage — Mask/Gloves/Holster", "Armor — Backpack/Chest/Kneepads"],
     bonus2pc:      ["15% Armor on Kill"],

@@ -1,72 +1,65 @@
 "use client";
 
-import { useState } from "react";
 import { SPECIALIZATIONS } from "@/lib/gameData";
+import ItemCardTile from "./ui/ItemCardTile";
+
+const SPEC_COLOR = "#e8671a";
+const SPEC_BG    = "linear-gradient(100deg, #1a0e06 0%, #110a05 45%, #0c0f14 100%)";
 
 interface Props {
-  value: string;
-  onChange: (v: string) => void;
+  value:        string;
+  onOpenPicker: () => void;
 }
 
-export default function SpecializationCard({ value, onChange }: Props) {
+export default function SpecializationCard({ value, onOpenPicker }: Props) {
+  const isEmpty  = !value;
   const selected = SPECIALIZATIONS.find(s => s.id === value);
 
-  return (
-    <div
-      className="flex items-center gap-4 px-5 py-3"
+  const heroSlot = selected ? (
+    <img
+      src={selected.icon}
+      alt={selected.name}
       style={{
-        background: "#08111a",
-        borderLeft: "4px solid #e8671a",
-        border: "1px solid #1a2530",
-        borderLeftWidth: 4,
+        position:      "absolute",
+        right:         16,
+        top:           "50%",
+        transform:     "translateY(-50%)",
+        height:        88,
+        width:         88,
+        objectFit:     "contain",
+        mixBlendMode:  "screen",
+        opacity:       0.85,
+        filter:        "sepia(1) saturate(15) hue-rotate(310deg) brightness(0.85)",
+        pointerEvents: "none",
+        zIndex:        2,
       }}
+    />
+  ) : null;
+
+  return (
+    <ItemCardTile
+      isEmpty={isEmpty}
+      rarColor={SPEC_COLOR}
+      background={SPEC_BG}
+      open={false}
+      onToggle={onOpenPicker}
+      heroSlot={heroSlot}
+      contentPaddingRight={112}
     >
-      {/* Label */}
-      <span className="text-[9px] tracking-[0.3em] text-[#4a6a8a] font-rajdhani font-bold uppercase flex-shrink-0">
-        SPECIALIZATION
-      </span>
-
-      {/* Selector buttons */}
-      <div className="flex gap-2 flex-1 flex-wrap">
-        {SPECIALIZATIONS.map(spec => {
-          const isActive = value === spec.id;
-          return (
-            <button
-              key={spec.id}
-              type="button"
-              onClick={() => onChange(isActive ? "" : spec.id)}
-              title={spec.name}
-              className="flex flex-col items-center gap-1 px-3 py-2 cursor-pointer transition-all font-rajdhani"
-              style={{
-                background:   isActive ? "#1a2e3e" : "transparent",
-                border:       `1px solid ${isActive ? "#e8671a" : "#1e2a38"}`,
-                outline:      "none",
-              }}
-            >
-              <img
-                src={spec.icon}
-                alt={spec.name}
-                width={28}
-                height={28}
-                style={{ mixBlendMode: "screen", opacity: isActive ? 1 : 0.45 }}
-              />
-              <span
-                className="text-[9px] tracking-[0.12em] uppercase leading-none"
-                style={{ color: isActive ? "#e8671a" : "#4a6a8a" }}
-              >
-                {spec.name}
-              </span>
-            </button>
-          );
-        })}
+      <div
+        className="font-rajdhani font-bold leading-tight"
+        style={{ fontSize: 20, color: isEmpty ? "#3a4a5a" : "#ffffff" }}
+      >
+        {selected?.name ?? "Specialization"}
       </div>
-
-      {/* Selected name */}
-      {selected && (
-        <span className="text-sm font-rajdhani font-bold tracking-[0.1em] flex-shrink-0" style={{ color: "#e8671a" }}>
-          {selected.name.toUpperCase()}
+      {!isEmpty && (
+        <span
+          className="font-rajdhani font-bold tracking-[0.25em] uppercase"
+          style={{ fontSize: 9, color: SPEC_COLOR + "55" }}
+        >
+          Specialization
         </span>
       )}
-    </div>
+    </ItemCardTile>
   );
 }

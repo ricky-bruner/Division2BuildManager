@@ -53,8 +53,9 @@ export function getEditableSlots(def: NamedGearItem): EditableSlotInfo {
     core = { locked: false };
   }
 
-  // Minors
-  const minors: MinorSlotInfo[] = def.minors.map(m => {
+  // Minors — Gear Set items only have 1 minor slot
+  const minorDefs = def.rarity === "Gear Set" ? def.minors.slice(0, 1) : def.minors;
+  const minors: MinorSlotInfo[] = minorDefs.map(m => {
     if (m.type === "fixed")              return { locked: true, name: m.name, value: m.value };
     if (m.type === "any-basic-group")    return { locked: false, group: m.group };
     if (m.type === "any-basic-restricted") return { locked: false, exclude: m.exclude };

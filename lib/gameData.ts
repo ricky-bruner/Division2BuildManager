@@ -93,23 +93,26 @@ export const WEAPON_MODS = {
 };
 
 export const SKILLS = [
-  "Chem Launcher", "Drone", "Firefly", "Hive", "Pulse",
-  "Seeker Mine", "Shield", "Turret",
+  "Chem Launcher", "Decoy", "Drone", "Firefly", "Hive", "Pulse",
+  "Seeker Mine", "Shield", "Sticky Bomb", "Trap", "Turret",
   "Signature — Banshee", "Signature — Blinder Firefly", "Signature — Striker Drone",
 ];
 
 export const SKILL_MODS: Record<string, string[]> = {
-  "Chem Launcher": ["Oxidizer", "Corrosive", "Healing Mist", "Riot Foam"],
-  "Drone": ["Assault", "Defender", "Fixer", "Striker"],
-  "Firefly": ["Blinder", "Burster", "Demolisher", "Incinerator"],
-  "Hive": ["Booster", "Restorer", "Reviver", "Stinger", "Artificer"],
-  "Pulse": ["Disruptor", "Jammer", "Recon", "Remote Disruptor", "Scanner"],
-  "Seeker Mine": ["Airburst", "Cluster", "Explosive", "Mender"],
-  "Shield": ["Bulwark", "Crusader", "Deflector", "Intervention"],
-  "Turret": ["Artillery", "Incinerator", "Minigun", "Mortar", "Sniper"],
-  "Signature — Banshee": ["N/A"],
+  "Chem Launcher": ["Oxidizer", "Firestarter", "Reinforcer", "Foam"],
+  "Decoy":         ["Holographic"],
+  "Drone":         ["Bombardier", "Defender", "Fixer", "Striker", "Tactician"],
+  "Firefly":       ["Blinder", "Burster", "Demolisher"],
+  "Hive":          ["Artificer", "Booster", "Restorer", "Reviver", "Stinger"],
+  "Pulse":         ["Achilles", "Jammer", "Remote", "Scanner"],
+  "Seeker Mine":   ["Airburst", "Cluster", "Explosive", "Mender"],
+  "Shield":        ["Bulwark", "Crusader", "Deflector", "Striker"],
+  "Sticky Bomb":   ["Burn", "EMP", "Explosive"],
+  "Trap":          ["Repair", "Shock", "Shrapnel"],
+  "Turret":        ["Artillery", "Assault", "Incinerator", "Sniper"],
+  "Signature — Banshee":         ["N/A"],
   "Signature — Blinder Firefly": ["N/A"],
-  "Signature — Striker Drone": ["N/A"],
+  "Signature — Striker Drone":   ["N/A"],
 };
 
 export const SPECIALIZATIONS = [
@@ -157,10 +160,9 @@ export const WEAPON_SLOTS = [
 
 export function defaultWeaponItem(): WeaponItem {
   return {
-    name: "", rarity: "High-End",
+    name: "", rarity: "High-End", weaponType: "",
     coreAttr: WEAPON_CORE_ATTRS[0], coreValue: "",
     minor1: MINOR_ATTRS[0], minor1Val: "",
-    minor2: MINOR_ATTRS[1], minor2Val: "",
     talent1: WEAPON_TALENTS[0], talent2: WEAPON_TALENTS[1],
     scope: WEAPON_MODS.Scope[0], barrel: WEAPON_MODS.Barrel[0],
     underbarrel: WEAPON_MODS.Underbarrel[0], magazine: WEAPON_MODS.Magazine[0],
@@ -168,7 +170,7 @@ export function defaultWeaponItem(): WeaponItem {
 }
 
 export function defaultSkill(): SkillSlot {
-  return { skill: SKILLS[0], mod: SKILL_MODS[SKILLS[0]][0] };
+  return { skill: "", mod: "" };
 }
 
 export function defaultBuild(): Build {

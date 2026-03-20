@@ -6,14 +6,18 @@ import { defaultBuild, GEAR_SLOTS, WEAPON_SLOTS } from "@/lib/gameData";
 import GearCard           from "./GearCard";
 import GearPickerModal    from "./GearPickerModal";
 import WeaponCard         from "./WeaponCard";
+import WeaponPickerModal  from "./WeaponPickerModal";
 import SkillCard          from "./SkillCard";
-import SpecializationCard from "./SpecializationCard";
+import SkillPickerModal   from "./SkillPickerModal";
+import SpecializationCard        from "./SpecializationCard";
+import SpecializationPickerModal from "./SpecializationPickerModal";
+import BuildStatsPanel           from "./BuildStatsPanel";
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-3 mt-6 mb-3">
       <div className="w-0.5 h-5 bg-[#e8671a]" />
-      <span className="text-xs tracking-[0.3em] text-[#c8d0d8] font-rajdhani font-bold uppercase">
+      <span className="text-base tracking-[0.3em] text-[#c8d0d8] font-rajdhani font-bold uppercase">
         {children}
       </span>
       <div className="flex-1 h-px bg-[#1a2530]" />
@@ -25,7 +29,10 @@ export default function BuildPlanner() {
   const [builds, setBuilds]         = useState<Build[]>([defaultBuild()]);
   const [activeId, setActiveId]     = useState<number>(builds[0].id);
   const [editingName, setEditingName] = useState(false);
-  const [pickerSlot, setPickerSlot] = useState<GearSlot | null>(null);
+  const [pickerSlot,  setPickerSlot]  = useState<GearSlot | null>(null);
+  const [pickerSkill, setPickerSkill] = useState<"skill1" | "skill2" | null>(null);
+  const [pickerSpec,   setPickerSpec]   = useState(false);
+  const [pickerWeapon, setPickerWeapon] = useState<"primary" | "secondary" | "sidearm" | null>(null);
   const importRef = useRef<HTMLInputElement>(null);
 
   const activeBuild = builds.find(b => b.id === activeId) ?? builds[0];
@@ -86,10 +93,10 @@ export default function BuildPlanner() {
   };
 
   return (
-    <div className="min-h-screen bg-[#060b10] grid-bg">
+    <div className="min-h-screen bg-black grid-bg">
 
       {/* ── Top Bar ── */}
-      <header className="sticky top-0 z-50 bg-[#080e15] border-b border-[#1e2a38] h-14 px-6 flex items-center gap-4">
+      <header className="sticky top-0 z-50 bg-[#0a0a0a] border-b border-[#1e2a38] h-14 px-6 flex items-center gap-4">
         <div className="flex items-center gap-3">
           <div className="w-7 h-7 border-2 border-[#e8671a] diamond flex items-center justify-center flex-shrink-0">
             <div className="w-2.5 h-2.5 bg-[#e8671a]" />
@@ -128,8 +135,8 @@ export default function BuildPlanner() {
       <div className="flex min-h-[calc(100vh-56px)]">
 
         {/* ── Sidebar ── */}
-        <aside className="w-56 bg-[#08111a] border-r border-[#1a2530] py-4 flex-shrink-0 overflow-y-auto">
-          <div className="px-4 pb-3 text-[9px] tracking-[0.25em] text-[#3a5a7a] uppercase font-rajdhani font-semibold">
+        <aside className="w-56 bg-[#0a0a0a] border-r border-[#1a2530] py-4 flex-shrink-0 overflow-y-auto">
+          <div className="px-4 pb-3 text-[12px] tracking-[0.25em] text-[#3a5a7a] uppercase font-rajdhani font-semibold">
             BUILDS ({builds.length})
           </div>
 
@@ -169,7 +176,7 @@ export default function BuildPlanner() {
         </aside>
 
         {/* ── Main Content ── */}
-        <main className="flex-1 px-6 py-5 overflow-y-auto animate-fadeIn">
+        <main className="px-6 py-5 overflow-y-auto animate-fadeIn w-full">
 
           {/* Build name */}
           <div className="flex items-center gap-3 mb-5">
@@ -194,112 +201,168 @@ export default function BuildPlanner() {
               </h1>
             )}
             {!editingName && (
-              <span className="text-[9px] text-[#3a5a7a] tracking-[0.15em] font-rajdhani">
+              <span className="text-[12px] text-[#3a5a7a] tracking-[0.15em] font-rajdhani">
                 CLICK TO RENAME
               </span>
             )}
           </div>
-
-          {/* Specialization */}
-          <SpecializationCard
-            value={activeBuild.specialization}
-            onChange={v => updateBuild(b => ({ ...b, specialization: v }))}
-          />
-
-          {/* ── WEAPONS — 3 across ── */}
-          <SectionLabel>Weapons</SectionLabel>
-          <div className="grid grid-cols-3 gap-3">
-            {WEAPON_SLOTS.map(slot => (
-              <WeaponCard
-                key={slot.id}
-                slotId={slot.id}
-                slotLabel={slot.label}
-                item={activeBuild.weapons[slot.id]}
-                onChange={item => updateBuild(b => ({ ...b, weapons: { ...b.weapons, [slot.id]: item } }))}
-              />
-            ))}
-          </div>
-
-          {/* ── GEAR — 2×3 tiles + 1×3 perk box ── */}
-          <SectionLabel>Gear</SectionLabel>
-          <div
-            style={{
-              display:             "grid",
-              gridTemplateColumns: "1fr 1fr 1fr",
-              gridTemplateRows:    "repeat(3, auto)",
-              gap:                 12,
-            }}
-          >
-            {GEAR_SLOTS.map((slot, i) => (
+          <div className="flex gap-4 items-stretch">
+            <div className="w-1/4 flex-shrink-0 flex flex-col">
               <div
-                key={slot.id}
                 style={{
-                  gridColumn: (i % 2) + 1,
-                  gridRow:    Math.floor(i / 2) + 1,
+                  flex:          1,
+                  background:    "#080d12",
+                  border:        "1px solid #1a2530",
+                  borderLeft:    "4px solid #e8671a44",
+                  display:       "flex",
+                  flexDirection: "column",
+                  padding:       "14px 12px",
+                  gap:           8,
                 }}
               >
-                <GearCard
-                  slotId={slot.id}
-                  slotLabel={slot.label}
-                  item={activeBuild.gear[slot.id]}
-                  onOpenPicker={() => setPickerSlot(slot.id)}
+                <div
+                  className="text-[14px] tracking-[0.3em] font-rajdhani font-bold uppercase mb-3"
+                  style={{ color: "#b0c4d8" }}
+                >
+                  Stats Breakdown
+                </div>
+                <BuildStatsPanel build={activeBuild} />
+              </div>
+            </div>
+
+            <div className="w-2/3">
+              {/* Specialization */}
+              <div className="w-1/3">
+                <SpecializationCard
+                  value={activeBuild.specialization}
+                  onOpenPicker={() => setPickerSpec(true)}
                 />
               </div>
-            ))}
+              {/* ── WEAPONS — 3 across ── */}
+              <SectionLabel>Weapons</SectionLabel>
+              <div className="grid grid-cols-3 gap-3">
+                {WEAPON_SLOTS.map(slot => (
+                  <WeaponCard
+                    key={slot.id}
+                    slotId={slot.id}
+                    slotLabel={slot.label}
+                    item={activeBuild.weapons[slot.id]}
+                    onOpenPicker={() => setPickerWeapon(slot.id)}
+                  />
+                ))}
+              </div>
 
-            {/* Perk breakdown — spans all 3 gear rows */}
-            <div
-              style={{
-                gridColumn:  3,
-                gridRow:     "1 / span 3",
-                background:  "#080d12",
-                border:      "1px solid #1a2530",
-                borderLeft:  "4px solid #e8671a44",
-                display:     "flex",
-                flexDirection: "column",
-                padding:     "14px 12px",
-                gap:         8,
-              }}
-            >
+              {/* ── GEAR — 2×3 tiles + 1×3 perk box ── */}
+              <SectionLabel>Gear</SectionLabel>
               <div
-                className="text-[9px] tracking-[0.3em] font-rajdhani font-bold uppercase"
-                style={{ color: "#4a6a8a" }}
+                style={{
+                  display:             "grid",
+                  gridTemplateColumns: "1fr 1fr 1fr",
+                  gridTemplateRows:    "repeat(3, auto)",
+                  gap:                 12,
+                }}
               >
-                Perk Breakdown
+                {GEAR_SLOTS.map((slot, i) => (
+                  <div
+                    key={slot.id}
+                    style={{
+                      gridColumn: (i % 2) + 1,
+                      gridRow:    Math.floor(i / 2) + 1,
+                    }}
+                  >
+                    <GearCard
+                      slotId={slot.id}
+                      slotLabel={slot.label}
+                      item={activeBuild.gear[slot.id]}
+                      onOpenPicker={() => setPickerSlot(slot.id)}
+                    />
+                  </div>
+                ))}
+
+                {/* Perk breakdown — spans all 3 gear rows */}
+                <div
+                  style={{
+                    gridColumn:  3,
+                    gridRow:     "1 / span 3",
+                    background:  "#080d12",
+                    border:      "1px solid #1a2530",
+                    borderLeft:  "4px solid #e8671a44",
+                    display:     "flex",
+                    flexDirection: "column",
+                    padding:     "14px 12px",
+                    gap:         8,
+                  }}
+                >
+                  <div
+                    className="text-[14px] tracking-[0.3em] font-rajdhani font-bold uppercase"
+                    style={{ color: "#b0c4d8" }}
+                  >
+                    Perk Breakdown
+                  </div>
+                  <div
+                    className="text-[12px] font-rajdhani italic"
+                    style={{ color: "#2a3a4a" }}
+                  >
+                    — coming soon —
+                  </div>
+                </div>
               </div>
-              <div
-                className="text-[10px] font-rajdhani italic"
-                style={{ color: "#2a3a4a" }}
-              >
-                — coming soon —
+
+              {/* ── SKILLS — 3 across ── */}
+              <SectionLabel>Skills</SectionLabel>
+              <div className="grid grid-cols-3 gap-3">
+                <SkillCard
+                  slotLabel="SKILL 1"
+                  value={activeBuild.skill1}
+                  onOpenPicker={() => setPickerSkill("skill1")}
+                />
+                <SkillCard
+                  slotLabel="SKILL 2"
+                  value={activeBuild.skill2}
+                  onOpenPicker={() => setPickerSkill("skill2")}
+                />
+                <div style={{ background: "#080d12", border: "1px solid #1a2530" }} />
               </div>
+
+              {pickerSlot && (
+                <GearPickerModal
+                  slot={pickerSlot}
+                  current={activeBuild.gear[pickerSlot]}
+                  onConfirm={updated => { updateBuild(b => ({ ...b, gear: { ...b.gear, [pickerSlot]: updated } })); setPickerSlot(null); }}
+                  onClose={() => setPickerSlot(null)}
+                />
+              )}
+
+              {pickerSkill && (
+                <SkillPickerModal
+                  slotLabel={pickerSkill === "skill1" ? "SKILL 1" : "SKILL 2"}
+                  current={activeBuild[pickerSkill]}
+                  otherSkill={pickerSkill === "skill1" ? activeBuild.skill2.skill : activeBuild.skill1.skill}
+                  onConfirm={s => { updateBuild(b => ({ ...b, [pickerSkill]: s })); setPickerSkill(null); }}
+                  onClose={() => setPickerSkill(null)}
+                />
+              )}
+
+              {pickerWeapon && (
+                <WeaponPickerModal
+                  slotId={pickerWeapon}
+                  slotLabel={pickerWeapon.toUpperCase()}
+                  current={activeBuild.weapons[pickerWeapon]}
+                  onConfirm={item => { updateBuild(b => ({ ...b, weapons: { ...b.weapons, [pickerWeapon]: item } })); setPickerWeapon(null); }}
+                  onClose={() => setPickerWeapon(null)}
+                />
+              )}
+
+              {pickerSpec && (
+                <SpecializationPickerModal
+                  current={activeBuild.specialization}
+                  onConfirm={v => updateBuild(b => ({ ...b, specialization: v }))}
+                  onClose={() => setPickerSpec(false)}
+                />
+              )}
             </div>
           </div>
 
-          {/* ── SKILLS — 3 across ── */}
-          <SectionLabel>Skills</SectionLabel>
-          <div className="grid grid-cols-3 gap-3">
-            <SkillCard
-              slotLabel="SKILL 1"
-              value={activeBuild.skill1}
-              onChange={s => updateBuild(b => ({ ...b, skill1: s }))}
-            />
-            <SkillCard
-              slotLabel="SKILL 2"
-              value={activeBuild.skill2}
-              onChange={s => updateBuild(b => ({ ...b, skill2: s }))}
-            />
-            <div style={{ background: "#080d12", border: "1px solid #1a2530" }} />
-          </div>
-
-          {pickerSlot && (
-            <GearPickerModal
-              slot={pickerSlot}
-              current={activeBuild.gear[pickerSlot]}
-              onConfirm={updated => { updateBuild(b => ({ ...b, gear: { ...b.gear, [pickerSlot]: updated } })); setPickerSlot(null); }}
-              onClose={() => setPickerSlot(null)}
-            />
-          )}
 
           {/* ── NOTES ── */}
           <SectionLabel>Notes</SectionLabel>

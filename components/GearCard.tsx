@@ -34,16 +34,17 @@ export default function GearCard({ slotId, slotLabel, item, onOpenPicker }: Prop
     ? (BRANDS.find(b => b.name === def.brand)?.icon ?? GEAR_SETS.find(g => g.name === def.brand)?.icon ?? "")
     : "";
 
-  // Build the attribute icon list from the resolved item + build slot
-  const attrSlots: string[] = [];
+  // Build per-series attribute icon lists
+  const coreAttrs: string[] = [];
+  const minorAttrs: string[] = [];
   if (def) {
     const info = getEditableSlots(def);
     if (info.core.locked && "allCores" in info.core && info.core.allCores) {
-      attrSlots.push(...ALL_CORE_ATTRS);
+      coreAttrs.push(...ALL_CORE_ATTRS);
     } else {
-      attrSlots.push(item.coreAttr);
+      coreAttrs.push(item.coreAttr);
     }
-    item.minors.forEach(m => attrSlots.push(m.attr));
+    item.minors.forEach(m => minorAttrs.push(m.attr));
   }
 
   const heroSlot = (
@@ -81,14 +82,14 @@ export default function GearCard({ slotId, slotLabel, item, onOpenPicker }: Prop
       <div style={{ textAlign: "center" }}>
         <div
           className="font-rajdhani font-bold leading-tight"
-          style={{ fontSize: 15, color: isEmpty ? "#3a4a5a" : "#ffffff" }}
+          style={{ fontSize: 20, color: isEmpty ? "#3a4a5a" : "#ffffff" }}
         >
           {def?.gearName || slotLabel}
         </div>
         {def?.brand && (
           <div
             className="font-rajdhani font-semibold"
-            style={{ fontSize: 11, color: rarColor + "cc", marginTop: 1 }}
+            style={{ fontSize: 15, color: rarColor + "cc", marginTop: 1 }}
           >
             {def.brand}
           </div>
@@ -97,20 +98,32 @@ export default function GearCard({ slotId, slotLabel, item, onOpenPicker }: Prop
 
       {/* Attribute + mod icons */}
       <div className="flex items-center justify-center gap-1.5">
-        {attrSlots.map((attr, i) => (
+        {coreAttrs.map((attr, i) => (
           <img
-            key={i} src={attrIconSrc(attr)} alt={attr} title={attr}
+            key={`core-${i}`} src={attrIconSrc(attr, 1)} alt={attr} title={attr}
             width={18} height={18}
             style={{ mixBlendMode: "screen", opacity: attr ? 0.85 : 0.2 }}
           />
         ))}
-        {Array(def?.modSlots ?? 0).fill(null).map((_, i) => (
+        {minorAttrs.map((attr, i) => (
           <img
-            key={`mod-${i}`} src="/stats/blank_mod.png" alt="mod"
-            width={16} height={16}
-            style={{ mixBlendMode: "screen", opacity: item.modAttrs[i]?.attr ? 0.7 : 0.15 }}
+            key={`minor-${i}`} src={attrIconSrc(attr, 2)} alt={attr} title={attr}
+            width={18} height={18}
+            style={{ mixBlendMode: "screen", opacity: attr ? 0.85 : 0.2 }}
           />
         ))}
+        {Array(def?.modSlots ?? 0).fill(null).map((_, i) => {
+          const modAttr = item.modAttrs[i]?.attr;
+          return (
+            <img
+              key={`mod-${i}`}
+              src={modAttr ? attrIconSrc(modAttr, 3) : "/stats/blank_mod.png"}
+              alt={modAttr || "mod"} title={modAttr || "mod slot"}
+              width={16} height={16}
+              style={{ mixBlendMode: "screen", opacity: modAttr ? 0.7 : 0.15 }}
+            />
+          );
+        })}
       </div>
     </ItemCardTile>
   );
